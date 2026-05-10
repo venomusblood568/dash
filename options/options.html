@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command Palette — Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+
+  <div class="page">
+
+    <header class="header">
+      <div class="header-left">
+        <div class="logo-mark">⌘</div>
+        <div>
+          <h1 class="title">Command Palette</h1>
+          <p class="subtitle">Manage your aliases</p>
+        </div>
+      </div>
+      <div class="shortcut-display">
+        <span class="key-badge">⌘</span>
+        <span class="key-badge">⇧</span>
+        <span class="key-badge">K</span>
+      </div>
+    </header>
+
+    <main class="main">
+
+      <!-- Add alias form -->
+      <section class="card add-card">
+        <h2 class="card-title">Add alias</h2>
+        <div class="form-row">
+          <div class="field">
+            <label class="field-label">Alias</label>
+            <input
+              id="input-alias"
+              class="field-input mono"
+              type="text"
+              placeholder="gh"
+              autocomplete="off"
+              spellcheck="false"
+              maxlength="32"
+            />
+          </div>
+          <div class="field arrow-field">
+            <span class="arrow">→</span>
+          </div>
+          <div class="field field-url">
+            <label class="field-label">URL</label>
+            <input
+              id="input-url"
+              class="field-input mono"
+              type="text"
+              placeholder="https://github.com"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+          <div class="field">
+            <label class="field-label">Label <span class="optional">(optional)</span></label>
+            <input
+              id="input-label"
+              class="field-input"
+              type="text"
+              placeholder="GitHub"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+        <div class="form-footer">
+          <span id="form-error" class="form-error"></span>
+          <button id="btn-add" class="btn-primary">Add alias</button>
+        </div>
+      </section>
+
+      <!-- Alias list -->
+      <section class="card list-card">
+        <div class="list-header">
+          <h2 class="card-title">Your aliases</h2>
+          <span id="alias-count" class="alias-count">0 aliases</span>
+        </div>
+        <div id="alias-list" class="alias-list">
+          <!-- Rendered by options.js -->
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <script src="../storage.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

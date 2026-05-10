@@ -1,0 +1,130 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  width: 280px;
+  background: #0e0e10;
+  font-family: 'Syne', sans-serif;
+}
+
+.card {
+  padding: 16px;
+}
+
+.top {
+  margin-bottom: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.name {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #f0f0f0;
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #3a3a4a;
+  margin-top: 1px;
+  letter-spacing: 0.02em;
+}
+
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #141418;
+  border: 1px solid #656565;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.shortcut-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #4a4a5a;
+  letter-spacing: 0.02em;
+}
+
+.keys {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a22;
+  border: 1px solid #2a2a36;
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 2px 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #6a6a7a;
+  min-width: 24px;
+}
+
+.divider {
+  height: 1px;
+  background: #141418;
+  margin-bottom: 12px;
+}
+
+.btn-open {
+  width: 100%;
+  padding: 9px;
+  background: #7b6cff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.12s ease;
+  margin-bottom: 12px;
+  letter-spacing: 0.01em;
+}
+
+.btn-open:hover { opacity: 0.88; }
+.btn-open:active { transform: scale(0.98); }
+
+.hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #756d6d;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+}
+
+.hint code {
+  color: #b3b3b3;
+  background: #141418;
+  padding: 1px 4px;
+  border-radius: 3px;
+}

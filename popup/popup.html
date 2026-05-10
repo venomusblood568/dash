@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dash</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+    <div class="card">
+
+        <div class="top">
+            <div class="brand">
+                <div class=""><img src="/icons/icon32.png"/></div>
+                <div>
+                    <div class="name">Dash</div>
+                    <div class="tagline">keyboard-driven navigation</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="shortcut-row">
+            <span class="shortcut-label">Open launcher</span>
+            <div class="keys" id="keys">
+                <span class="key">⌘</span>
+                <span class="key">⇧</span>
+                <span class="key">Space</span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <button class="btn-open" id="btn-open">Open Dash now</button>
+
+        <div class="hint">
+            Type <code>/add</code> <code>/list</code> <code>/delete</code> inside the launcher to manage aliases.
+        </div>
+
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>
