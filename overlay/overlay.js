@@ -1,111 +1,60 @@
 (() => {
   if (document.getElementById("cp-host")) return;
 
-  // ── Themes ─────────────────────────────────────────────────────
-  const THEMES = {
-    default: {
-      "--cp-bg": "#0e0e0f",
-      "--cp-bg-deep": "#0a0a0b",
-      "--cp-bg-item": "#0f0f12",
-      "--cp-border": "#2a2a2e",
-      "--cp-border-sub": "#131316",
-      "--cp-accent": "#7b6cff",
-      "--cp-accent-2": "#ff6fff",
-      "--cp-accent-3": "#6fb3ff",
-      "--cp-text": "#f0f0f0",
-      "--cp-text-muted": "#d0d0d8",
-      "--cp-text-dim": "#3a3a46",
-      "--cp-text-ghost": "#2e2e36",
-      "--cp-caret": "#7b6cff",
-      "--cp-pill-bg": "#1e1a3a",
-      "--cp-pill-border": "#2e2860",
-    },
-    monochrome: {
-      "--cp-bg": "#080808",
-      "--cp-bg-deep": "#050505",
-      "--cp-bg-item": "#0c0c0c",
-      "--cp-border": "#1f1f1f",
-      "--cp-border-sub": "#141414",
-      "--cp-accent": "#ffffff",
-      "--cp-accent-2": "#aaaaaa",
-      "--cp-accent-3": "#686868",
-      "--cp-text": "#f0f0f0",
-      "--cp-text-muted": "#d0d0d0",
-      "--cp-text-dim": "#2e2e2e",
-      "--cp-text-ghost": "#222222",
-      "--cp-caret": "#ffffff",
-      "--cp-pill-bg": "#161616",
-      "--cp-pill-border": "#2a2a2a",
-    },
-    toxic: {
-      "--cp-bg": "#060e0c",
-      "--cp-bg-deep": "#040a07",
-      "--cp-bg-item": "#091410",
-      "--cp-border": "#0d2a20",
-      "--cp-border-sub": "#0b1c14",
-      "--cp-accent": "#00ff88",
-      "--cp-accent-2": "#00d4ff",
-      "--cp-accent-3": "#a0ffd8",
-      "--cp-text": "#f0fff8",
-      "--cp-text-muted": "#a0ffd8",
-      "--cp-text-dim": "#1a4030",
-      "--cp-text-ghost": "#0e2a20",
-      "--cp-caret": "#00ff88",
-      "--cp-pill-bg": "#0c2018",
-      "--cp-pill-border": "#143828",
-    },
-    rose: {
-      "--cp-bg": "#0e060c",
-      "--cp-bg-deep": "#090408",
-      "--cp-bg-item": "#120710",
-      "--cp-border": "#2a1020",
-      "--cp-border-sub": "#180c14",
-      "--cp-accent": "#ff2d78",
-      "--cp-accent-2": "#cc00ff",
-      "--cp-accent-3": "#ff90c0",
-      "--cp-text": "#fff0f8",
-      "--cp-text-muted": "#ffc0e0",
-      "--cp-text-dim": "#3a1830",
-      "--cp-text-ghost": "#220e1c",
-      "--cp-caret": "#ff2d78",
-      "--cp-pill-bg": "#1e0e18",
-      "--cp-pill-border": "#351828",
-    },
-    ocean: {
-      "--cp-bg": "#04090f",
-      "--cp-bg-deep": "#030710",
-      "--cp-bg-item": "#060c18",
-      "--cp-border": "#0a1e35",
-      "--cp-border-sub": "#081520",
-      "--cp-accent": "#1a8fff",
-      "--cp-accent-2": "#00d4c8",
-      "--cp-accent-3": "#80ccff",
-      "--cp-text": "#f0f8ff",
-      "--cp-text-muted": "#c0e0ff",
-      "--cp-text-dim": "#0e2a45",
-      "--cp-text-ghost": "#081830",
-      "--cp-caret": "#1a8fff",
-      "--cp-pill-bg": "#0a1828",
-      "--cp-pill-border": "#122840",
-    },
-    amber: {
-      "--cp-bg": "#0e0804",
-      "--cp-bg-deep": "#090502",
-      "--cp-bg-item": "#120a04",
-      "--cp-border": "#2a1408",
-      "--cp-border-sub": "#1a0e06",
-      "--cp-accent": "#ff5500",
-      "--cp-accent-2": "#ffaa00",
-      "--cp-accent-3": "#ff9060",
-      "--cp-text": "#fff8f0",
-      "--cp-text-muted": "#ffd0a0",
-      "--cp-text-dim": "#4a2810",
-      "--cp-text-ghost": "#2a1208",
-      "--cp-caret": "#ff5500",
-      "--cp-pill-bg": "#1e1008",
-      "--cp-pill-border": "#381e10",
-    },
-  };
+  // ── Theme engine ───────────────────────────────────────────────
+  const { THEMES, THEME_ORDER, applyThemeToExtension } = window.__DashThemes;
+
+  // ── Storage (inlined) ─────────────────────────────────────────
+  const STORAGE_KEY = "aliases";
+
+  function getAliases() {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get([STORAGE_KEY], (result) => {
+        resolve(result[STORAGE_KEY] || []);
+      });
+    });
+  }
+
+  function saveAliases(aliases) {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ [STORAGE_KEY]: aliases }, resolve);
+    });
+  }
+
+  async function addAlias({ alias, url, label }) {
+    const aliases = await getAliases();
+    const normalized = alias.trim().toLowerCase();
+    if (aliases.some((a) => a.alias === normalized)) {
+      throw new Error(`Alias "${normalized}" already exists.`);
+    }
+    const entry = {
+      alias: normalized,
+      url: url.trim(),
+      label: label ? label.trim() : "",
+    };
+    aliases.push(entry);
+    await saveAliases(aliases);
+    return entry;
+  }
+
+  async function deleteAlias(aliasString) {
+    const aliases = await getAliases();
+    await saveAliases(aliases.filter((a) => a.alias !== aliasString));
+  }
+
+  async function findMatches(input) {
+    if (!input || !input.trim()) return [];
+    const aliases = await getAliases();
+    const query = input.trim().toLowerCase();
+    return aliases.filter((a) => a.alias.startsWith(query));
+  }
+
+  async function findExactMatch(input) {
+    if (!input || !input.trim()) return null;
+    const aliases = await getAliases();
+    const query = input.trim().toLowerCase();
+    return aliases.find((a) => a.alias === query) || null;
+  }
 
   // ── Shadow DOM ─────────────────────────────────────────────────
   const host = document.createElement("div");
@@ -113,21 +62,10 @@
   document.documentElement.appendChild(host);
   const shadow = host.attachShadow({ mode: "open" });
 
-  // ── Theme engine ───────────────────────────────────────────────
-  // Apply vars directly as inline style on the modal element (highest specificity,
-  // no selector-matching issues inside shadow DOM).
-  function applyTheme(name) {
-    const t = THEMES[name] || THEMES.default;
-    // modal may not exist yet — store for after markup is inserted
-    applyTheme._pending = t;
+  // ── Apply theme vars onto modal ────────────────────────────────
+  function applyThemeToModal(themeName) {
     const modal = shadow.getElementById("cp-modal");
-    if (modal) _applyThemeVars(modal, t);
-  }
-
-  function _applyThemeVars(modal, t) {
-    for (const [k, v] of Object.entries(t)) {
-      modal.style.setProperty(k, v);
-    }
+    if (modal) applyThemeToExtension(modal, themeName);
   }
 
   // ── CSS ────────────────────────────────────────────────────────
@@ -171,13 +109,6 @@
   `;
   shadow.appendChild(backdrop);
 
-  // ── Apply saved theme now that modal exists ────────────────────
-  const modal = shadow.getElementById("cp-modal");
-  chrome.storage.sync.get("dash-theme", ({ "dash-theme": saved }) => {
-    const t = THEMES[saved] || THEMES.default;
-    _applyThemeVars(modal, t);
-  });
-
   // ── Refs ───────────────────────────────────────────────────────
   const input = shadow.getElementById("cp-input");
   const results = shadow.getElementById("cp-results");
@@ -189,6 +120,13 @@
   let selectedIndex = -1;
   let currentItems = [];
   let mode = "search";
+  let activeTheme = "void";
+
+  // ── Load & apply saved theme ───────────────────────────────────
+  chrome.storage.sync.get("dash-theme", ({ "dash-theme": saved }) => {
+    activeTheme = saved || "void";
+    applyThemeToModal(activeTheme);
+  });
 
   // ── Slash commands registry ────────────────────────────────────
   const COMMANDS = [
@@ -205,11 +143,18 @@
   ];
 
   // ── Open / close ───────────────────────────────────────────────
-  function openPalette() {
+  async function openPalette() {
     isOpen = true;
     backdrop.classList.add("visible");
     input.value = "";
-    resetToSearch();
+    mode = "search";
+    selectedIndex = -1;
+    currentItems = [];
+    modePill.style.display = "none";
+    input.placeholder = "type an alias or / for commands...";
+    setFooterSearch();
+    const all = await getAliases();
+    all.length === 0 ? renderEmpty() : renderAliases(all);
     requestAnimationFrame(() => input.focus());
   }
 
@@ -365,21 +310,20 @@
     });
   }
 
-  // ── Theme list renderer — supports optional filtering ──────────
+  // ── Theme list renderer with hover preview ─────────────────────
   function renderThemeList(partial = "") {
     results.innerHTML = "";
     currentItems = [];
 
-    const themeNames = Object.keys(THEMES);
-    const filtered = partial
-      ? themeNames.filter((n) => n.startsWith(partial))
-      : themeNames;
+    const filtered = THEME_ORDER.filter((n) =>
+      partial ? n.startsWith(partial) : true,
+    );
 
     const header = document.createElement("div");
     header.className = "cp-list-header";
     header.textContent = partial
-      ? `${filtered.length} theme${filtered.length !== 1 ? "s" : ""} matching "${partial}" — ↵ or click to apply`
-      : `${themeNames.length} themes available — ↵ or click to apply`;
+      ? `${filtered.length} theme${filtered.length !== 1 ? "s" : ""} matching "${partial}" — hover to preview, ↵ to apply`
+      : `${THEME_ORDER.length} themes — hover to preview, ↵ or click to apply`;
     results.appendChild(header);
 
     if (filtered.length === 0) {
@@ -395,19 +339,28 @@
       const el = document.createElement("div");
       el.className = "cp-item" + (i === selectedIndex ? " selected" : "");
       el.innerHTML = `
-        <span class="cp-cmd-name" style="color:${t["--cp-accent"]}">${esc(name)}</span>
+        <span class="cp-cmd-name" style="color:${t.accent}">${esc(name)}</span>
         <span class="cp-cmd-syntax">
           <span style="display:inline-flex;gap:5px;align-items:center;">
-            <span style="width:10px;height:10px;border-radius:50%;background:${t["--cp-accent"]};display:inline-block;"></span>
-            <span style="width:10px;height:10px;border-radius:50%;background:${t["--cp-accent-2"]};display:inline-block;"></span>
-            <span style="width:10px;height:10px;border-radius:50%;background:${t["--cp-accent-3"]};display:inline-block;"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:${t.accent};display:inline-block;"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:${t.accentBright};display:inline-block;"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:${t.accentAlt};display:inline-block;"></span>
           </span>
         </span>
-        <span class="cp-cmd-desc" style="color:${t["--cp-text-dim"]}">click or ↵ to apply</span>`;
+        <span class="cp-cmd-desc" style="color:${t.textDim}">↵ to apply</span>`;
 
+      el.addEventListener("mouseenter", () => applyThemeToModal(name));
+      el.addEventListener("mouseleave", () => applyThemeToModal(activeTheme));
       el.addEventListener("click", () => applyAndSaveTheme(name));
       results.appendChild(el);
     });
+
+    // Revert if mouse leaves the whole list without clicking
+    results.addEventListener(
+      "mouseleave",
+      () => applyThemeToModal(activeTheme),
+      { once: true },
+    );
 
     currentItems = filtered.map((name) => ({ type: "theme", data: { name } }));
     if (filtered.length && selectedIndex === -1) {
@@ -417,7 +370,8 @@
   }
 
   function applyAndSaveTheme(name) {
-    _applyThemeVars(modal, THEMES[name] || THEMES.default);
+    activeTheme = name;
+    applyThemeToModal(name);
     chrome.storage.sync.set({ "dash-theme": name });
     renderFeedback(
       `✓ theme set to <span style="color:var(--cp-accent)">${esc(name)}</span>`,
@@ -432,10 +386,13 @@
     const el = document.createElement("div");
     el.className = "cp-info-card";
     el.innerHTML = `
-      <div class="cp-info-title">Dash <span class="cp-info-version">v1.0.0</span></div>
-      <div class="cp-info-sub">Keyboard-first browser launcher</div>
-      <div class="cp-info-divider"></div>
-      <div class="cp-info-row">Built by <span class="cp-info-author">Sam</span></div>
+      <div class="cp-info-left">
+        <div class="cp-info-icon">⚡</div>
+        <div>
+          <div class="cp-info-title">Dash <span class="cp-info-version">v1.0.0</span></div>
+          <div class="cp-info-sub">keyboard-first browser launcher</div>
+        </div>
+      </div>
       <div class="cp-info-links">
         <a class="cp-info-link" href="https://github.com/venomusblood568" target="_blank">GitHub</a>
         <a class="cp-info-link" href="https://gourav-duck.vercel.app/" target="_blank">Portfolio</a>
@@ -444,10 +401,13 @@
   }
 
   // ── Input handler ──────────────────────────────────────────────
+  // KEY FIX: split raw input.value (not trimmed query) so trailing
+  // spaces are preserved — "/theme " was trimming to "/theme" and
+  // hitting the single-token branch instead of showing the picker.
   input.addEventListener("input", handleInput);
 
   async function handleInput() {
-    const val = input.value;
+    const val = input.value; // raw, untrimmed
     const query = val.trim();
     selectedIndex = -1;
 
@@ -456,26 +416,29 @@
       modePill.style.display = "inline-flex";
       setFooterCommand();
 
-      const parts = query.split(/\s+/);
+      // Split the RAW value so "/theme " → ["/theme", ""] (length 2)
+      // instead of trimming to "/theme" → ["/theme"] (length 1).
+      const parts = val.trimStart().split(/\s+/);
       const cmdToken = parts[0].toLowerCase();
 
-      // Still typing the command name — show matching suggestions
-      if (parts.length === 1) {
-        const filtered = COMMANDS.filter((c) => c.cmd.startsWith(cmdToken));
-        renderCommandSuggestions(filtered);
-        return;
-      }
-
-      // Command name is complete; handle argument context
-      const matched = COMMANDS.find((c) => c.cmd === cmdToken);
-
-      if (matched?.cmd === "/theme") {
-        // Always show live-filtered theme list while user types the name
-        const partial = parts[1]?.toLowerCase() || "";
+      // ── /theme: always open the picker immediately ─────────────
+      // Covers: "/theme", "/theme ", "/theme vo", etc.
+      if (cmdToken === "/theme") {
+        const partial = (parts[1] || "").toLowerCase();
         renderThemeList(partial);
         return;
       }
 
+      // ── Still typing the command name → autocomplete ───────────
+      if (parts.length === 1) {
+        renderCommandSuggestions(
+          COMMANDS.filter((c) => c.cmd.startsWith(cmdToken)),
+        );
+        return;
+      }
+
+      // ── Command + args → show syntax hint ─────────────────────
+      const matched = COMMANDS.find((c) => c.cmd === cmdToken);
       if (matched) {
         results.innerHTML = `<div class="cp-syntax-hint"><span class="cp-cmd-name">${esc(matched.cmd)}</span><span class="cp-cmd-syntax">${esc(matched.syntax)}</span></div>`;
       } else {
@@ -485,6 +448,7 @@
       return;
     }
 
+    // ── Alias search mode ──────────────────────────────────────────
     mode = "search";
     modePill.style.display = "none";
     setFooterSearch();
@@ -566,15 +530,13 @@
     if (cmd === "/theme") {
       const name = parts[1]?.toLowerCase();
       if (!name) {
-        // No name — show full picker
         renderThemeList();
         input.value = "";
         return;
       }
       if (!THEMES[name]) {
-        const available = Object.keys(THEMES).join(" · ");
         renderFeedback(
-          `unknown theme. available: <span style="color:var(--cp-accent)">${available}</span>`,
+          `unknown theme. available: <span style="color:var(--cp-accent)">${THEME_ORDER.join(" · ")}</span>`,
           "error",
         );
         return;
@@ -600,18 +562,19 @@
       case "Escape":
         e.preventDefault();
         if (mode === "command") {
+          applyThemeToModal(activeTheme);
           input.value = "";
           resetToSearch();
-        } else closePalette();
+        } else {
+          closePalette();
+        }
         break;
 
       case "Enter": {
         e.preventDefault();
         const val = input.value.trim();
         if (!val) break;
-
         if (val.startsWith("/")) {
-          // If a theme item is selected, apply it directly
           if (currentItems[selectedIndex]?.type === "theme") {
             applyAndSaveTheme(currentItems[selectedIndex].data.name);
             break;
@@ -619,7 +582,6 @@
           await executeCommand(val);
           break;
         }
-
         if (
           selectedIndex >= 0 &&
           currentItems[selectedIndex]?.type === "alias"
@@ -651,6 +613,9 @@
         selectedIndex = Math.min(selectedIndex + 1, currentItems.length - 1);
         updateSel();
         scrollSel();
+        if (currentItems[selectedIndex]?.type === "theme") {
+          applyThemeToModal(currentItems[selectedIndex].data.name);
+        }
         break;
 
       case "ArrowUp":
@@ -659,6 +624,9 @@
         selectedIndex = Math.max(selectedIndex - 1, 0);
         updateSel();
         scrollSel();
+        if (currentItems[selectedIndex]?.type === "theme") {
+          applyThemeToModal(currentItems[selectedIndex].data.name);
+        }
         break;
     }
   });

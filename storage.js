@@ -83,3 +83,16 @@ async function findExactMatch(input) {
 
   return aliases.find((a) => a.alias === query) || null;
 }
+
+// ── Expose to other content scripts ───────────────────────────
+// overlay.js runs in the same content script context and reads
+// these functions from window.__DashStorage.
+window.__DashStorage = {
+  getAliases,
+  saveAliases,
+  addAlias,
+  deleteAlias,
+  updateAlias,
+  findMatches,
+  findExactMatch,
+};

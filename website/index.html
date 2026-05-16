@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="void">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dash — Keyboard-first browser navigation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- themes.css is auto-generated from themes.js via generateThemeCSS() -->
+    <!-- Run: node -e "import('./themes.js').then(m=>process.stdout.write(m.generateThemeCSS()))" > themes.css -->
+    <!-- Then add: <link rel="stylesheet" href="themes.css"> and remove the theme blocks from style.css -->
+</head>
+
+<body>
+
+    <!-- ─── COMMAND OVERLAY ─── -->
+    <div id="cmd-overlay" role="dialog" aria-label="Command palette" aria-modal="true">
+        <div id="cmd-box">
+            <div id="cmd-input-row">
+                <span class="cmd-prompt">›_</span>
+                <input id="cmd-input" placeholder="type a command or alias…" autocomplete="off" spellcheck="false"
+                    aria-label="Command input">
+                <span class="cmd-esc">esc</span>
+            </div>
+            <div id="cmd-results" role="listbox"></div>
+            <div id="cmd-footer">
+                <div class="cmd-hint"><span class="k">↑↓</span> navigate</div>
+                <div class="cmd-hint"><span class="k">↵</span> go</div>
+                <div class="cmd-hint"><span class="k">esc</span> close</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── TOAST ─── -->
+    <div id="toast"></div>
+
+    <!-- ─── NAV ─── -->
+    <nav>
+        <a class="nav-logo" href="#">
+            <span class="logo-dot"></span>
+            dash
+        </a>
+        <div class="nav-right">
+            <a class="nav-link" href="#philosophy">docs</a>
+            <a class="nav-link" href="#setup">commands</a>
+            <a class="nav-link" href="#themes">themes</a>
+            <button class="nav-invoke" id="navInvokeBtn" title="Open command palette (ctrl+space)">
+                <span class="k">ctrl</span>+<span class="k">space</span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+
+        <!-- ─── HERO ─── -->
+        <section class="hero">
+            <div class="hero-left">
+                <p class="hero-eyebrow">Browser Extension · Keyboard Navigation</p>
+                <h1 class="hero-h1">Your browser<br>already has <em>a<br>command line.</em></h1>
+                <p class="hero-sub">Dash turns two keystrokes into navigation. No bookmarks. No mouse. No tab hunting.
+                    No accounts.</p>
+                <div class="hero-btns">
+                    <a href="#install" class="btn-primary">Add to Chrome →</a>
+                    <a href="#philosophy" class="btn-ghost">How it works</a>
+                </div>
+                <div class="hero-hint">
+                    Press <span class="k">ctrl</span>+<span class="k">space</span> to invoke it now →
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="palette" id="heroPalette">
+                    <div class="pal-input">
+                        <span class="pal-prompt">›_</span>
+                        <input class="pal-field" id="palField" readonly placeholder="type a command…" autocomplete="off"
+                            spellcheck="false">
+                        <div class="pal-enter-chip">↵</div>
+                    </div>
+                    <div class="pal-row active" data-alias="gh">
+                        <div class="pal-alias">gh</div>
+                        <div class="pal-name">GitHub</div>
+                        <div class="pal-meta">
+                            <div class="pal-url">github.com</div>
+                            <div class="pal-go">↵</div>
+                        </div>
+                    </div>
+                    <div class="pal-row" data-alias="yt">
+                        <div class="pal-alias">yt</div>
+                        <div class="pal-name">YouTube</div>
+                        <div class="pal-meta">
+                            <div class="pal-url">youtube.com</div>
+                            <div class="pal-go">↵</div>
+                        </div>
+                    </div>
+                    <div class="pal-row" data-alias="gm">
+                        <div class="pal-alias">gm</div>
+                        <div class="pal-name">Gmail</div>
+                        <div class="pal-meta">
+                            <div class="pal-url">mail.google.com</div>
+                            <div class="pal-go">↵</div>
+                        </div>
+                    </div>
+                    <div class="pal-row" data-alias="fig">
+                        <div class="pal-alias">fig</div>
+                        <div class="pal-name">Figma</div>
+                        <div class="pal-meta">
+                            <div class="pal-url">figma.com</div>
+                            <div class="pal-go">↵</div>
+                        </div>
+                    </div>
+                    <div class="pal-footer">
+                        <div class="pal-hint"><span class="k">↑↓</span> navigate</div>
+                        <div class="pal-hint"><span class="k">↵</span> open</div>
+                        <div class="pal-hint"><span class="k">esc</span> close</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── MANIFESTO ─── -->
+        <section class="manifesto" id="philosophy">
+            <div class="manifesto-label">
+                <span class="section-eyebrow">Philosophy</span>
+            </div>
+            <div class="manifesto-body">
+                <p class="manifesto-h">
+                    Most browser navigation is <strong>repetitive friction.</strong> You already know where you're going
+                    — the browser makes you prove it every time.
+                    <br><br>
+                    Dash removes the proof.
+                </p>
+                <div class="flow">
+                    <span class="flow-step">Open</span>
+                    <span class="flow-arrow">→</span>
+                    <span class="flow-step">Type</span>
+                    <span class="flow-arrow">→</span>
+                    <span class="flow-step">Enter</span>
+                    <span class="flow-arrow">→</span>
+                    <span class="flow-step">Done.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── TRUTHS ─── -->
+        <section class="truths">
+            <div class="truth-cell">
+                <div class="truth-neg">bookmarks</div>
+                <div class="truth-val">2–4 keystrokes</div>
+            </div>
+            <div class="truth-cell">
+                <div class="truth-neg">mouse</div>
+                <div class="truth-val">keyboard only</div>
+            </div>
+            <div class="truth-cell">
+                <div class="truth-neg">tab hunting</div>
+                <div class="truth-val">&lt;80ms launch</div>
+            </div>
+            <div class="truth-cell">
+                <div class="truth-neg">accounts</div>
+                <div class="truth-val">∞ aliases, local</div>
+            </div>
+        </section>
+
+        <!-- ─── SETUP ─── -->
+        <section class="setup" id="setup">
+            <div class="setup-col">
+                <p class="col-title">Set up aliases</p>
+                <div class="cmd-block">
+                    <div class="cmd-line">
+                        <span class="cmd-slash">/add</span>
+                        <span>gh</span>
+                        <span class="cmd-url">https://github.com</span>
+                        <span>GitHub</span>
+                    </div>
+                    <div class="cmd-line">
+                        <span class="cmd-slash">/add</span>
+                        <span>yt</span>
+                        <span class="cmd-url">https://youtube.com</span>
+                        <span>YouTube</span>
+                    </div>
+                    <div class="cmd-line">
+                        <span class="cmd-slash">/add</span>
+                        <span>gm</span>
+                        <span class="cmd-url">https://mail.google.com</span>
+                        <span>Gmail</span>
+                    </div>
+                    <div class="cmd-line">
+                        <span class="cmd-slash">/add</span>
+                        <span>fig</span>
+                        <span class="cmd-url">https://figma.com</span>
+                        <span>Figma</span>
+                    </div>
+                </div>
+            </div>
+            <div class="setup-col">
+                <p class="col-title">Then use it</p>
+                <div class="cmd-block">
+                    <div class="usage-row">
+                        <span class="k">ctrl</span><span class="k-plus">+</span><span class="k">space</span>
+                        <span class="ua">→</span>
+                        <span class="usage-alias">gh</span>
+                        <span class="ua">→</span>
+                        <span class="usage-enter">↵</span>
+                    </div>
+                    <div class="usage-row">
+                        <span class="k">ctrl</span><span class="k-plus">+</span><span class="k">space</span>
+                        <span class="ua">→</span>
+                        <span class="usage-alias">yt</span>
+                        <span class="ua">→</span>
+                        <span class="usage-enter">↵</span>
+                    </div>
+                    <div class="usage-row">
+                        <span class="k">ctrl</span><span class="k-plus">+</span><span class="k">space</span>
+                        <span class="ua">→</span>
+                        <span class="usage-alias">gm</span>
+                        <span class="ua">→</span>
+                        <span class="usage-enter">↵</span>
+                    </div>
+                </div>
+                <p class="setup-note">that's it.</p>
+            </div>
+        </section>
+
+        <!-- ─── THEMES ─── -->
+        <section id="themes">
+            <div class="themes-label">
+                <div>
+                    <span class="section-eyebrow">Themes</span>
+                    <div class="themes-sub">press <span class="k" style="font-size:.55rem">t</span> to cycle</div>
+                </div>
+            </div>
+            <div class="themes-right">
+                <!-- Dark themes -->
+                <button class="swatch active" data-theme-id="void" style="--sw-accent:#6c63ff">
+                    <div class="swatch-box" style="background:#0d0d0f;"></div>
+                    <span class="swatch-name">void</span>
+                </button>
+                <button class="swatch" data-theme-id="night" style="--sw-accent:#58a6ff">
+                    <div class="swatch-box" style="background:#0d1117;"></div>
+                    <span class="swatch-name">night</span>
+                </button>
+                <button class="swatch" data-theme-id="ocean" style="--sw-accent:#00b4d8">
+                    <div class="swatch-box" style="background:#050e1a;"></div>
+                    <span class="swatch-name">ocean</span>
+                </button>
+                <button class="swatch" data-theme-id="amber" style="--sw-accent:#f59e0b">
+                    <div class="swatch-box" style="background:#110e00;"></div>
+                    <span class="swatch-name">amber</span>
+                </button>
+                <button class="swatch" data-theme-id="forest" style="--sw-accent:#22c55e">
+                    <div class="swatch-box" style="background:#030f06;"></div>
+                    <span class="swatch-name">forest</span>
+                </button>
+                <button class="swatch" data-theme-id="plum" style="--sw-accent:#c084fc">
+                    <div class="swatch-box" style="background:#0c0010;"></div>
+                    <span class="swatch-name">plum</span>
+                </button>
+                <button class="swatch" data-theme-id="monochrome" style="--sw-accent:#ffffff">
+                    <div class="swatch-box" style="background:#080808;"></div>
+                    <span class="swatch-name">mono</span>
+                </button>
+                <button class="swatch" data-theme-id="toxic" style="--sw-accent:#00ff88">
+                    <div class="swatch-box" style="background:#060e0c;"></div>
+                    <span class="swatch-name">toxic</span>
+                </button>
+                <button class="swatch" data-theme-id="rose" style="--sw-accent:#ff2d78">
+                    <div class="swatch-box" style="background:#0e060c;"></div>
+                    <span class="swatch-name">rose</span>
+                </button>
+                <!-- Light themes -->
+                <button class="swatch" data-theme-id="paper" style="--sw-accent:#4338ca">
+                    <div class="swatch-box" style="background:#fafaf8; border-color:#ccc;"></div>
+                    <span class="swatch-name">paper</span>
+                </button>
+                <button class="swatch" data-theme-id="chalk" style="--sw-accent:#e11d48">
+                    <div class="swatch-box" style="background:#fefefe; border-color:#ccc;"></div>
+                    <span class="swatch-name">chalk</span>
+                </button>
+                <span class="themes-count">11 built-in</span>
+            </div>
+        </section>
+
+        <!-- ─── INSTALL ─── -->
+        <section id="install">
+            <div class="install-left">
+                <div class="install-h">Install Dash</div>
+                <p class="install-sub">Chrome and Chromium-based browsers. Free, open-source, no account required.</p>
+                <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+                    <a href="#" class="btn-primary">Add to Chrome →</a>
+                    <a href="#" class="btn-ghost">View on GitHub</a>
+                </div>
+            </div>
+            <div class="install-right">
+                <div class="shortcut-card">
+                    <div class="shortcut-label">Invoke with</div>
+                    <div class="shortcut-keys">
+                        <span class="k-large">ctrl</span>
+                        <span class="k-plus">+</span>
+                        <span class="k-large">space</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="footer-brand">
+            <span class="logo-dot"></span>
+            dash — keyboard-first browser navigation
+        </div>
+        <div class="footer-links">
+            <a href="#">docs</a>
+            <a href="#">github</a>
+            <a href="#">changelog</a>
+        </div>
+        <div class="footer-shortcut">
+            <span class="k" style="font-size:.55rem">/</span> invoke ·
+            <span class="k" style="font-size:.55rem">t</span> theme ·
+            <span class="k" style="font-size:.55rem">j</span><span class="k" style="font-size:.55rem">k</span> scroll
+        </div>
+    </footer>
+
+    <!-- type="module" enables ES module imports in script.js -->
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
