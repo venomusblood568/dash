@@ -604,8 +604,7 @@ main { padding-top: 52px; position: relative; z-index: 1; }
   max-width: calc(100vw - 3rem);  
   white-space: nowrap;            
   overflow: hidden;               
-  text-overflow: ellipsis; 
-  right: auto;         
+  text-overflow: ellipsis;         
 }
 #toast.show { opacity: 1; transform: translateY(0); }
 
