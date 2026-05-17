@@ -4,12 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dash — Keyboard-first browser navigation</title>
+
+    <title>Dash</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./icon32.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -39,17 +46,15 @@
     <!-- ─── NAV ─── -->
     <nav>
         <a class="nav-logo" href="#">
-            <img src="/icon32.png" alt="dash logo" />
-            dash
+            <img src="./icon32.png" alt="dash logo" width="20" height="20" onerror="this.style.display='none'" />
+            Dash
         </a>
         <div class="nav-right">
             <a class="nav-link" href="#philosophy">docs</a>
             <a class="nav-link" href="#setup">commands</a>
             <a class="nav-link" href="#themes">themes</a>
             <button class="nav-invoke" id="navInvokeBtn" title="Open command palette (shift+ctrl+space)">
-                <span class="k">shift</span>+
-                <span class="k">ctrl</span>+
-                <span class="k">space</span>
+                <span class="k">shift</span>+<span class="k">ctrl</span>+<span class="k">space</span>
             </button>
         </div>
     </nav>
@@ -61,16 +66,15 @@
             <div class="hero-left">
                 <p class="hero-eyebrow">Browser Extension · Keyboard Navigation</p>
                 <h1 class="hero-h1">Your browser<br>already has <em>a<br>command line.</em></h1>
-                <p class="hero-sub">Dash turns keystrokes into navigation. No bookmarks. No mouse. No tab hunting.
-                    No accounts.</p>
+                <p class="hero-sub">Dash turns keystrokes into navigation. No bookmarks. No mouse. No tab hunting. No
+                    accounts.</p>
                 <div class="hero-btns">
                     <a href="#install" class="btn-primary">Add to Chrome →</a>
                     <a href="#philosophy" class="btn-ghost">How it works</a>
                 </div>
                 <div class="hero-hint">
-                    Press <span class="k">shift</span>+
-                    <span class="k">ctrl</span>+
-                    <span class="k">space</span> to invoke it now →
+                    Press <span class="k">shift</span>+<span class="k">ctrl</span>+<span class="k">space</span> to
+                    invoke it now →
                 </div>
             </div>
             <div class="hero-right">
@@ -130,10 +134,8 @@
             <div class="manifesto-body">
                 <p class="manifesto-h">
                     You already know where you're going.
-                    The browser just makes you repeat it
-                    every time.
+                    The browser just makes you repeat it every time.
                     <br><br>
-
                     Dash removes the <strong>repetition.</strong>
                 </p>
                 <div class="flow">
@@ -233,55 +235,44 @@
             <div class="themes-label">
                 <div>
                     <span class="section-eyebrow">Themes</span>
-                    <div class="themes-sub">press <span class="k" style="font-size:.55rem">t</span> to cycle</div>
+                    <div class="themes-sub">press <span class="k">t</span> to cycle</div>
                 </div>
             </div>
             <div class="themes-right">
-                <!-- Dark themes -->
                 <button class="swatch active" data-theme-id="void" style="--sw-accent:#6c63ff">
-                    <div class="swatch-box" style="background:#0d0d0f;"></div>
-                    <span class="swatch-name">void</span>
+                    <div class="swatch-box" style="background:#0d0d0f;"></div><span class="swatch-name">void</span>
                 </button>
                 <button class="swatch" data-theme-id="night" style="--sw-accent:#58a6ff">
-                    <div class="swatch-box" style="background:#0d1117;"></div>
-                    <span class="swatch-name">night</span>
+                    <div class="swatch-box" style="background:#0d1117;"></div><span class="swatch-name">night</span>
                 </button>
                 <button class="swatch" data-theme-id="ocean" style="--sw-accent:#00b4d8">
-                    <div class="swatch-box" style="background:#050e1a;"></div>
-                    <span class="swatch-name">ocean</span>
+                    <div class="swatch-box" style="background:#050e1a;"></div><span class="swatch-name">ocean</span>
                 </button>
                 <button class="swatch" data-theme-id="amber" style="--sw-accent:#f59e0b">
-                    <div class="swatch-box" style="background:#110e00;"></div>
-                    <span class="swatch-name">amber</span>
+                    <div class="swatch-box" style="background:#110e00;"></div><span class="swatch-name">amber</span>
                 </button>
                 <button class="swatch" data-theme-id="forest" style="--sw-accent:#22c55e">
-                    <div class="swatch-box" style="background:#030f06;"></div>
-                    <span class="swatch-name">forest</span>
+                    <div class="swatch-box" style="background:#030f06;"></div><span class="swatch-name">forest</span>
                 </button>
                 <button class="swatch" data-theme-id="plum" style="--sw-accent:#c084fc">
-                    <div class="swatch-box" style="background:#0c0010;"></div>
-                    <span class="swatch-name">plum</span>
+                    <div class="swatch-box" style="background:#0c0010;"></div><span class="swatch-name">plum</span>
                 </button>
                 <button class="swatch" data-theme-id="monochrome" style="--sw-accent:#ffffff">
-                    <div class="swatch-box" style="background:#080808;"></div>
-                    <span class="swatch-name">mono</span>
+                    <div class="swatch-box" style="background:#080808;"></div><span class="swatch-name">mono</span>
                 </button>
                 <button class="swatch" data-theme-id="toxic" style="--sw-accent:#00ff88">
-                    <div class="swatch-box" style="background:#060e0c;"></div>
-                    <span class="swatch-name">toxic</span>
+                    <div class="swatch-box" style="background:#060e0c;"></div><span class="swatch-name">toxic</span>
                 </button>
                 <button class="swatch" data-theme-id="rose" style="--sw-accent:#ff2d78">
-                    <div class="swatch-box" style="background:#0e060c;"></div>
-                    <span class="swatch-name">rose</span>
+                    <div class="swatch-box" style="background:#0e060c;"></div><span class="swatch-name">rose</span>
                 </button>
-                <!-- Light themes -->
                 <button class="swatch" data-theme-id="paper" style="--sw-accent:#4338ca">
-                    <div class="swatch-box" style="background:#fafaf8; border-color:#ccc;"></div>
-                    <span class="swatch-name">paper</span>
+                    <div class="swatch-box" style="background:#fafaf8;border-color:#ccc;"></div><span
+                        class="swatch-name">paper</span>
                 </button>
                 <button class="swatch" data-theme-id="chalk" style="--sw-accent:#e11d48">
-                    <div class="swatch-box" style="background:#fefefe; border-color:#ccc;"></div>
-                    <span class="swatch-name">chalk</span>
+                    <div class="swatch-box" style="background:#fefefe;border-color:#ccc;"></div><span
+                        class="swatch-name">chalk</span>
                 </button>
                 <span class="themes-count">11 built-in</span>
             </div>
@@ -292,7 +283,7 @@
             <div class="install-left">
                 <div class="install-h">Install Dash</div>
                 <p class="install-sub">Chrome and Chromium-based browsers. Free, open-source, no account required.</p>
-                <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+                <div class="install-btns">
                     <a href="https://github.com/venomusblood568/dash" class="btn-primary">Add to Chrome →</a>
                     <a href="https://github.com/venomusblood568/dash" class="btn-ghost">View on GitHub</a>
                 </div>
@@ -301,9 +292,7 @@
                 <div class="shortcut-card">
                     <div class="shortcut-label">Invoke with</div>
                     <div class="shortcut-keys">
-                        <span class="k">shift</span>+
-                        <span class="k">ctrl</span>+
-                        <span class="k">space</span>
+                        <span class="k">shift</span>+<span class="k">ctrl</span>+<span class="k">space</span>
                     </div>
                 </div>
             </div>
@@ -311,27 +300,77 @@
 
     </main>
 
+    <!-- ─── FOOTER ─── -->
     <footer>
-        <div class="footer-brand">
-            <a class="nav-logo" href="#">
-                <img src="/icon32.png" alt="dash logo" />
-                dash
-            </a>
-            dash — keyboard-first browser navigation
+        <div class="footer-inner">
+
+            <!-- LEFT: Built by -->
+            <div class="footer-built">
+                <div class="footer-col-label">Built by</div>
+                <div class="built-card">
+                    <!-- <div class="built-avatar">SAM</div>← change initials -->
+                    <div class="built-info">
+                        <div class="built-name">Sam</div><!-- ← your name -->
+                        <div class="built-role">developer · designer</div><!-- ← your role -->
+                    </div>
+                </div>
+                <div class="built-links">
+                    <a class="built-link" href="https://gourav-duck.vercel.app/" target="_blank" rel="noopener">↗ portfolio</a><!-- ← your URL -->
+                    <a class="built-link" href="https://github.com/venomusblood568" target="_blank" rel="noopener">↗
+                        github</a>
+                </div>
+            </div>
+
+            <!-- RIGHT: Version / changelog -->
+            <div class="footer-changelog">
+                <div class="footer-col-label">Latest release</div>
+                <div class="changelog-scroll">
+            
+                    <div class="changelog-entry">
+                        <div class="changelog-meta">
+                            <span class="changelog-version">v1.1.0</span>
+                            <span class="changelog-badge">latest</span>
+                            <span class="changelog-date">17 May 2026</span>
+                        </div>
+            
+                        <ul class="changelog-notes">
+                            <li>Added 6 new themes — now 11 themes total</li>
+                            <li>Fresh visual redesign for multiple themes</li>
+                            <li>Official website launched for the extension</li>
+                            <li>Improved command experience and UI polish</li>
+                        </ul>
+                    </div>
+            
+                    <div class="changelog-entry">
+                        <div class="changelog-meta">
+                            <span class="changelog-version">v1.0.0</span>
+                            <span class="changelog-date">10 May 2026</span>
+                        </div>
+            
+                        <ul class="changelog-notes">
+                            <li>Initial extension release</li>
+                            <li>Alias-based browser navigation</li>
+                            <li>Theme switching support added</li>
+                            <li>Shipped with 5 built-in themes</li>
+                        </ul>
+                    </div>
+            
+                </div>
+            </div>
+
         </div>
-        <div class="footer-links">
-            <a href="#">docs</a>
-            <a href="#">github</a>
-            <a href="#">changelog</a>
-        </div>
-        <div class="footer-shortcut">
-            <span class="k" style="font-size:.55rem">/</span> invoke ·
-            <span class="k" style="font-size:.55rem">t</span> theme ·
-            <span class="k" style="font-size:.55rem">j</span><span class="k" style="font-size:.55rem">k</span> scroll
-        </div>
+
+        <!-- BOTTOM BAR -->
+        <!-- <div class="footer-bar">
+            <span class="footer-copy">dash — keyboard-first browser navigation</span>
+            <div class="footer-shortcuts">
+                <span class="k">/</span> invoke ·
+                <span class="k">t</span> theme ·
+                <span class="k">j</span><span class="k">k</span> scroll
+            </div>
+        </div> -->
     </footer>
 
-    <!-- type="module" enables ES module imports in script.js -->
     <script type="module" src="script.js"></script>
 </body>
 
