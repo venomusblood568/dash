@@ -276,6 +276,7 @@ main { padding-top: 52px; position: relative; z-index: 1; }
   display: grid; grid-template-columns: 1fr 1fr;
   min-height: calc(100vh - 52px);
   border-bottom: 1px solid var(--border);
+   overflow: hidden;
 }
 .hero-left {
   padding: 6rem 4rem 5rem;
@@ -332,6 +333,8 @@ main { padding-top: 52px; position: relative; z-index: 1; }
   display: flex; align-items: center; justify-content: center;
   padding: 3rem 2.5rem; background: var(--bg2);
   transition: background 0.25s;
+  overflow: hidden;  
+  min-width: 0;      
 }
 
 /* ── PALETTE (hero demo) ── */
@@ -598,7 +601,11 @@ main { padding-top: 52px; position: relative; z-index: 1; }
   opacity: 0; transform: translateY(8px);
   transition: opacity 0.2s, transform 0.2s;
   pointer-events: none;
-  max-width: calc(100vw - 3rem);
+  max-width: calc(100vw - 3rem);  
+  white-space: nowrap;            
+  overflow: hidden;               
+  text-overflow: ellipsis; 
+  right: auto;         
 }
 #toast.show { opacity: 1; transform: translateY(0); }
 
@@ -815,7 +822,7 @@ footer {
   .install-left, .install-right { padding: 2rem 1.25rem; }
   .footer-built, .footer-changelog { padding: 1.75rem 1.25rem; }
   .footer-bar { padding: 0.75rem 1.25rem; }
-  #toast { bottom: 1rem; right: 1rem; }
+  #toast { bottom: 1rem; left: 1rem; right: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
