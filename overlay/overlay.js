@@ -114,11 +114,8 @@
   const shadow = host.attachShadow({ mode: "open" });
 
   // ── Theme engine ───────────────────────────────────────────────
-  // Apply vars directly as inline style on the modal element (highest specificity,
-  // no selector-matching issues inside shadow DOM).
   function applyTheme(name) {
     const t = THEMES[name] || THEMES.default;
-    // modal may not exist yet — store for after markup is inserted
     applyTheme._pending = t;
     const modal = shadow.getElementById("cp-modal");
     if (modal) _applyThemeVars(modal, t);
@@ -139,6 +136,10 @@
   // ── Markup ─────────────────────────────────────────────────────
   const backdrop = document.createElement("div");
   backdrop.id = "cp-backdrop";
+  backdrop.style.display = "none"; 
+  styleLink.addEventListener("load", () => {
+    backdrop.style.display = "";
+  });
   backdrop.innerHTML = `
     <div id="cp-modal">
       <div id="cp-input-row">
@@ -404,7 +405,6 @@
           </span>
         </span>
         <span class="cp-cmd-desc" style="color:${t["--cp-text-dim"]}">click or ↵ to apply</span>`;
-
       el.addEventListener("click", () => applyAndSaveTheme(name));
       results.appendChild(el);
     });
@@ -459,18 +459,15 @@
       const parts = query.split(/\s+/);
       const cmdToken = parts[0].toLowerCase();
 
-      // Still typing the command name — show matching suggestions
       if (parts.length === 1) {
         const filtered = COMMANDS.filter((c) => c.cmd.startsWith(cmdToken));
         renderCommandSuggestions(filtered);
         return;
       }
 
-      // Command name is complete; handle argument context
       const matched = COMMANDS.find((c) => c.cmd === cmdToken);
 
       if (matched?.cmd === "/theme") {
-        // Always show live-filtered theme list while user types the name
         const partial = parts[1]?.toLowerCase() || "";
         renderThemeList(partial);
         return;
@@ -566,7 +563,6 @@
     if (cmd === "/theme") {
       const name = parts[1]?.toLowerCase();
       if (!name) {
-        // No name — show full picker
         renderThemeList();
         input.value = "";
         return;
@@ -611,7 +607,6 @@
         if (!val) break;
 
         if (val.startsWith("/")) {
-          // If a theme item is selected, apply it directly
           if (currentItems[selectedIndex]?.type === "theme") {
             applyAndSaveTheme(currentItems[selectedIndex].data.name);
             break;
