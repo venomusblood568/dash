@@ -480,8 +480,8 @@
         </div>
       </div>
       <div class="cp-info-links">
-        <a class="cp-info-link" href="https://github.com/yourhandle/dash" target="_blank">GitHub</a>
-        <a class="cp-info-link" href="https://yourportfolio.com" target="_blank">Portfolio</a>
+        <a class="cp-info-link" href="https://github.com/venomusblood568/dash" target="_blank">GitHub</a>
+        <a class="cp-info-link" href="https://gourav-duck.vercel.app/" target="_blank">Portfolio</a>
       </div>`;
     results.appendChild(el);
   }
