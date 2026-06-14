@@ -202,7 +202,7 @@
     { cmd: "/delete", syntax: "/delete <alias>", desc: "remove an alias" },
     { cmd: "/theme", syntax: "/theme <name>", desc: "switch color theme" },
     { cmd: "/info", syntax: "/info", desc: "about Dash" },
-    { cmd: "/help", syntax: "/help", desc: "show all commands" },
+    // { cmd: "/help", syntax: "/help", desc: "show all commands" },
   ];
 
   // ── Open / close ───────────────────────────────────────────────

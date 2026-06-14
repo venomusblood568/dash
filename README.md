@@ -58,7 +58,7 @@ That's it.
 | Delete alias | `/delete <alias>` | Remove an existing alias |
 | List aliases | `/list` | View and manage all aliases |
 | Change theme | `/theme <theme-name>` | Switch between available themes |
-| Help | `/help` | Show available commands and shortcuts |
+<!-- | Help | `/help` | Show available commands and shortcuts | -->
 | Info | `/info` | View project and developer information |
 
 ### Examples
